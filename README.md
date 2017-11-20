@@ -22,7 +22,7 @@ This repository is an implementation of Deep Metric Learning via Facility Locati
 2.
 
 ## Repository Information
--[x] densenet tensorflow training code
--[x] deep metric learning cluster loss code
--[ ] feature extraction code
--[ ] feature visulization code (tSNE)
+- [x] densenet tensorflow training code
+- [x] deep metric learning cluster loss code
+- [ ] feature extraction code
+- [ ] feature visulization code (tSNE)

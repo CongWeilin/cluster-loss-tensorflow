@@ -15,6 +15,14 @@ This repository is an implementation of Deep Metric Learning via Facility Locati
 1. Moify `metric_learning_densenet_cifar100.py` for training-params and densenet-params. We pick Cifar100 as our training data, because it's tiny, save GPU-memory (when batch size 64, it cost about 4.6G GPU-Memory) and good for doing research.
 2. Run `python metric_learning_densenet_cifar100.py`, the `data_provider` with automaticlly handle data download and process. After that, start Densenet-Cluster-loss training.
 
-## Feature Extraction after training
+## Feature Extraction after Training
 
-## Clustering and Retrieval evaluation code
+## Clustering and Retrieval Evaluation
+1. Run `python visualization/tsne.py` can plot the cluster result on Cifar database.
+2.
+
+## Repository Information
+-[x] densenet tensorflow training code
+-[x] deep metric learning cluster loss code
+-[ ] feature extraction code
+-[ ] feature visulization code (tSNE)

@@ -244,7 +244,7 @@ class DenseNet:
 
         with tf.variable_scope("Transition_to_classes"):
             embeddings = self.final_output(output)
-        
+            self.embeddings = embeddings
         # Losses
         loss = metric_loss.cluster_loss(self.labels,embeddings,self.margin_multiplier,print_losses=True)
         self.loss = loss
@@ -327,4 +327,20 @@ class DenseNet:
             total_loss.append(loss)
         mean_loss = np.mean(total_loss)
         return mean_loss
+
+    def feature_extracting(self, data, batch_size):
+        num_examples = data.num_examples
+        total_feature_embeddings = []
+        for i in range(num_examples // batch_size):
+            batch = data.next_batch(batch_size)
+            feed_dict = {
+                self.images: batch[0],
+                self.labels: batch[1],
+                self.is_training: False,
+            }
+            fetches = [self.embeddings]
+            loss = self.sess.run(fetches, feed_dict=feed_dict)
+            total_feature_embeddings.append(feature_embeddings)
+        total_feature_embeddings = np.array(total_feature_embeddings)
+        return total_feature_embeddings
 

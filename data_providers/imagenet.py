@@ -150,22 +150,26 @@ class ImagenetDataProvider(DataProvider):
 
     def get_filenames(self, save_path):
         """Return two lists of train and test filenames for dataset"""
-        train = '../imagenet/train'
-        test  = '../imagenet/test'
-        assert(os.path.exists(train) and os.path.exists(test))
-        return train,test
+        train_filenames = [
+            os.path.join(
+                save_path,
+                'train_data_batch_%d' % i) for i in range(1, 11)]
+        test_filenames = [os.path.join(save_path, 'val_data')]
+        return train_filenames, test_filenames
 
     def read_imagenet(self, filenames):
         images_res = []
         labels_res = []
-        with open(fname, 'rb') as f:
-            images_and_labels = pickle.load(f)
-        images = images_and_labels['data']
-        images = np.dstack((images[:, :1024], images[:, 1024:2048], images[:, 2048:]))
-        images = images.reshape((x.shape[0], 32, 32, 3))
-        images_res.append(images)
-        labels_res.append(images_and_labels['labels'])
-        labels_res = np.array(labels_res)
+        for fname in filenames:
+            with open(fname, 'rb') as f:
+                images_and_labels = pickle.load(f)
+            images = images_and_labels['data']
+            images = np.dstack((images[:, :1024], images[:, 1024:2048], images[:, 2048:]))
+            images = images.reshape((x.shape[0], 32, 32, 3))
+            images_res.append(images)
+            labels_res.append(images_and_labels['labels'])
+        images_res = np.vstack(images_res)
+        labels_res = np.hstack(labels_res)
         if self.one_hot:
             labels_res = self.labels_to_one_hot(labels_res)   
         return images_res, labels_res

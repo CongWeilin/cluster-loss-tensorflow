@@ -1,4 +1,4 @@
-# cluster-loss-tensorflow
+# Cluster-Loss-Tensorflow
 This repository is an implementation of Deep Metric Learning via Facility Location on tensorflow. We build this on Cifar100 and Densenet-40. This paper is available [here](https://arxiv.org/pdf/1612.01213.pdf). For the loss layer implementation, look at [here](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/losses/python/metric_learning). For the Densenet implementation, look at [here](https://github.com/ikhlestov/vision_networks).
  
 	@inproceedings{songCVPR17,
@@ -21,7 +21,7 @@ This repository is an implementation of Deep Metric Learning via Facility Locati
 1. Modify `metric_learning_densenet.py` extract feature embeddings on cifar test set, the embeddings is saved with `.npy` format used for evaluation process.
 
 ## Clustering and Retrieval Evaluation
-1. Run `python visualization/tsne.py` can plot and save the cluster result on Cifar database. 
+1. Run `python visualization/tsne.py` can plot and save the cluster result on Cifar database.
 ![tSNE](Evaluation/tsne.jpg)
 
 

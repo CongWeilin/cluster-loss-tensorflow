@@ -25,8 +25,10 @@ This repository is an implementation of Deep Metric Learning via Facility Locati
 ## Repository Information
 - [x] densenet tensorflow training code
 - [x] deep metric learning cluster loss code
-- [ ] feature extraction code
-- [ ] feature visulization code (tSNE)
-- [x] cifar-10
-- [x] cifar-100
-- [x] imagenet-32x32
+- [x] Evaludation
+    - [x] feature extraction code
+    - [x] feature visulization code (tSNE)
+- [x] Dataset support
+    - [x] cifar-10
+    - [x] cifar-100
+    - [x] imagenet-32x32

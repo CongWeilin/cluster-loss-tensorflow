@@ -5,7 +5,10 @@ from sklearn import manifold
 import pickle
 
 feature_embeddings = np.load('feature_embedding.npy') 
-images = np.load('cifar.npy') # images is cifar test set, shaped (10000,32,32,3)
+
+'''images is cifar test set, shaped (10000,32,32,3)'''
+'''https://psu.box.com/s/urgcz6ikanw6mbaxin2vws4fvthw73jw'''
+images = np.load('cifar.npy') 
 
 # use tsne to cluster images in 2 dimensions
 tsne = manifold.TSNE()

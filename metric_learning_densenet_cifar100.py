@@ -15,7 +15,7 @@ train_params_cifar = {
     'reduce_lr_epoch_1': 30,  # epochs * 0.5
     'reduce_lr_epoch_2': 45,  # epochs * 0.75
     'validation_set': True, 
-    'validation_split': None,  # None or float
+    'validation_split': 0.3,  # None or float
     'shuffle': 'every_epoch',  # None, once_prior_train, every_epoch
     'normalization': 'by_chanels',  # None, divide_256, divide_255, by_chanels
 }

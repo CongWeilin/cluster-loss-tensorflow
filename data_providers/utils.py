@@ -1,10 +1,15 @@
 from .cifar import Cifar10DataProvider, Cifar100DataProvider, \
     Cifar10AugmentedDataProvider, Cifar100AugmentedDataProvider
+from .imagenet import ImagenetDataProvider, ImagenetAugmentedDataProvider
 from .svhn import SVHNDataProvider
 
 
 def get_data_provider_by_name(name, train_params):
     """Return required data provider class"""
+    if name=='imagenet':
+        return ImagenetDataProvider(**train_params)
+    if name=='imagenet+':
+        return ImagenetAugmentedDataProvider(**train_params)
     if name == 'C10':
         return Cifar10DataProvider(**train_params)
     if name == 'C10+':

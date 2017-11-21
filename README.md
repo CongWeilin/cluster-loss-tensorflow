@@ -8,7 +8,6 @@ This repository is an implementation of Deep Metric Learning via Facility Locati
 	  Year      = {2017}
 	}
     
-![tSNE](Evaluation/tsne.jpg)
 ## Installation
 1. Install prerequsites for `tensorflow` (see: [tensorflow-gpu installation instructions](https://www.tensorflow.org/install/install_linux)).
 2. Run `pip install -r requirements.txt` get required support.
@@ -22,7 +21,9 @@ This repository is an implementation of Deep Metric Learning via Facility Locati
 1. Modify `metric_learning_densenet.py` extract feature embeddings on cifar test set, the embeddings is saved with `.npy` format used for evaluation process.
 
 ## Clustering and Retrieval Evaluation
-1. Run `python visualization/tsne.py` can plot and save the cluster result on Cifar database.
+1. Run `python visualization/tsne.py` can plot and save the cluster result on Cifar database. 
+![tSNE](Evaluation/tsne.jpg)
+
 
 ## Repository Information
 - [x] Densenet tensorflow training code

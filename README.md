@@ -1,4 +1,4 @@
-# Cluster-Loss-Tensorflow
+# Cluster-loss-Tensorflow
 This repository is an implementation of Deep Metric Learning via Facility Location on tensorflow. We build this on Cifar100 and Densenet-40. This paper is available [here](https://arxiv.org/pdf/1612.01213.pdf). For the loss layer implementation, look at [here](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/losses/python/metric_learning). For the Densenet implementation, look at [here](https://github.com/ikhlestov/vision_networks).
  
 	@inproceedings{songCVPR17,

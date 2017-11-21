@@ -34,13 +34,14 @@ densenet_params={
     'margin_multiplier':1.0,
 }
 
+data_provider = get_data_provider_by_name(densenet_params['dataset'], train_params_cifar)
+model = DenseNet(data_provider, densenet_params)
+
 training = False
 feature_extract = True
 
 if training:
-    data_provider = get_data_provider_by_name(densenet_params['dataset'], train_params_cifar)
     print("Data provider train images: ", data_provider.train.num_examples)
-    model = DenseNet(data_provider, densenet_params)
     model.train_all_epochs(train_params_cifar)
     
 if feature_extract:
@@ -49,4 +50,4 @@ if feature_extract:
     print("Data provider test images: ", data_provider.test.num_examples)
     feature_embeddings = model.feature_extracting(data_provider.test, batch_size=100)
     print(feature_embeddings.shape)
-    np.save(feature_embeddings,'feature_embedding.npy')
+    np.save('feature_embedding.npy',feature_embeddings)

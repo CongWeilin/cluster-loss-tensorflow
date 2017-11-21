@@ -1,11 +1,5 @@
-import os
-import time
-import shutil
-import sys
-from datetime import timedelta
-from data_providers.utils import get_data_provider_by_name
 import numpy as np
-import tensorflow as tf
+from data_providers.utils import get_data_provider_by_name
 from metric_learning.densenet import DenseNet
 
 train_params_cifar = {
@@ -15,7 +9,7 @@ train_params_cifar = {
     'reduce_lr_epoch_1': 30,  # epochs * 0.5
     'reduce_lr_epoch_2': 45,  # epochs * 0.75
     'validation_set': True, 
-    'validation_split': 0.3,  # None or float
+    'validation_split': None,  # None or float
     'shuffle': 'every_epoch',  # None, once_prior_train, every_epoch
     'normalization': 'by_chanels',  # None, divide_256, divide_255, by_chanels
 }
@@ -39,8 +33,20 @@ densenet_params={
     'logs_path':'/home/weilin/Downloads/densenet/saves/dense_12_40',
     'margin_multiplier':1.0,
 }
-data_provider = get_data_provider_by_name(densenet_params['dataset'], train_params_cifar)
-print("Data provider train images: ", data_provider.train.num_examples)
-model = DenseNet(data_provider, densenet_params)
-model.train_all_epochs(train_params_cifar)
 
+training = False
+feature_extract = True
+
+if training:
+    data_provider = get_data_provider_by_name(densenet_params['dataset'], train_params_cifar)
+    print("Data provider train images: ", data_provider.train.num_examples)
+    model = DenseNet(data_provider, densenet_params)
+    model.train_all_epochs(train_params_cifar)
+    
+if feature_extract:
+    if not training:
+        model.load_model()
+    print("Data provider test images: ", data_provider.test.num_examples)
+    feature_embeddings = model.feature_extracting(data_provider.test, batch_size=100)
+    print(feature_embeddings.shape)
+    np.save(feature_embeddings,'feature_embedding.npy')

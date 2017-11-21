@@ -77,6 +77,15 @@ class DenseNet:
 
     def save_model(self, global_step=None):
         self.saver.save(self.sess, self.save_path, global_step=global_step)
+        
+    def load_model(self):
+        try:
+            self.saver.restore(self.sess, self.save_path)
+        except Exception as e:
+            raise IOError("Failed to to load model "
+                          "from save path: %s" % self.save_path)
+        self.saver.restore(self.sess, self.save_path)
+        print("Successfully load model from save path: %s" % self.save_path)
 
     def log_loss(self, loss, epoch, prefix, should_print=True):
         if should_print:
@@ -343,4 +352,3 @@ class DenseNet:
             total_feature_embeddings.append(feature_embeddings)
         total_feature_embeddings = np.array(total_feature_embeddings)
         return total_feature_embeddings
-

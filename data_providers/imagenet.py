@@ -41,7 +41,7 @@ def augment_all_images(initial_images, pad):
 
 
 class ImagenetDataSet(ImagesDataSet):
-    def __init__(self, images, labels, n_classes=1000, shuffle, normalization,
+    def __init__(self, images, labels, n_classes, shuffle, normalization,
                  augmentation):
         if shuffle is None:
             self.shuffle_every_epoch = False

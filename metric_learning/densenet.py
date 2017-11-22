@@ -33,6 +33,7 @@ class DenseNet:
         self.display_iter = densenet_params['display_iter']
         self.logs_path = densenet_params['logs_path']
         self.margin_multiplier = densenet_params['margin_multiplier']
+        self.pretrained_model = densenet_params['pretrained_model']
         self.batches_step = 0
         
         if not self.bc_mode:
@@ -61,7 +62,6 @@ class DenseNet:
         self.sess = tf.Session(config=config)
         tf_ver = int(tf.__version__.split('.')[1])
         self.sess.run(tf.global_variables_initializer())
-        self.saver = tf.train.Saver()
         self.summary_writer = tf.summary.FileWriter(self.logs_path)
 
     def _count_trainable_params(self):
@@ -76,16 +76,30 @@ class DenseNet:
 
 
     def save_model(self, global_step=None):
-        self.saver.save(self.sess, self.save_path, global_step=global_step)
+        tf.train.Saver().save(self.sess, self.save_path, global_step=global_step)
         
     def load_model(self):
         try:
-            self.saver.restore(self.sess, self.save_path)
+            tf.train.Saver().restore(self.sess, self.pretrained_model)
         except Exception as e:
             raise IOError("Failed to to load model "
-                          "from save path: %s" % self.save_path)
-        self.saver.restore(self.sess, self.save_path)
-        print("Successfully load model from save path: %s" % self.save_path)
+                          "from save path: %s" % self.pretrained_model)
+        tf.train.Saver().restore(self.sess, self.pretrained_model)
+        print("Successfully load model from save path: %s" % self.pretrained_model)
+
+    def load_pretrained_model(self):
+        var = tf.global_variables()
+        var_to_restore = []
+        for var_ in var:
+            if "Feature_embeddings" not in var_.name:
+                var_to_restore.append(var_)
+        try:
+            tf.train.Saver(var_to_restore).restore(self.sess, self.pretrained_model)
+        except Exception as e:
+            raise IOError("Failed to to load model "
+                          "from save path: %s" % self.pretrained_model)
+        tf.train.Saver(var_to_restore).restore(self.sess, self.pretrained_model)
+        print("Successfully load model from save path: %s" % self.pretrained_model)
 
     def log_loss(self, loss, epoch, prefix, should_print=True):
         if should_print:
@@ -251,7 +265,7 @@ class DenseNet:
                 with tf.variable_scope("Transition_after_block_%d" % block):
                     output = self.transition_layer(output)
 
-        with tf.variable_scope("Transition_to_classes"):
+        with tf.variable_scope("Feature_embeddings"):
             embeddings = self.final_output(output)
             self.embeddings = embeddings
         # Losses

@@ -72,24 +72,27 @@ class CifarDataSet(ImagesDataSet):
         self.epoch_labels = labels
 
     def resample_train_batch(self,images,labels):
-        n_class = 100
-        n_samples_per_class = 100
-        class_per_batch = 16
-        batch_size = 64
+        n_class = len(set(labels))
+        n_samples_per_class = labels.shape[0]/n_class
+        batch_size = 128
+        class_per_batch = batch_size/4
         reorder_list_ = []
         for i in random.sample(range(n_class),n_class):
             list_ = np.where(labels==i)[0]
             list_ = random.sample(list_,len(list_))
             reorder_list_.append(list_)
         shuffle_list = []
-        per_class_ = batch_size/class_per_batch
-        for i in range(n_samples_per_class/per_class_): #16
+        per_class_ = batch_size/class_per_batch #4
+        for i in range(n_samples_per_class/per_class_): #25
             for j in range(n_class): #100
                 list_ = reorder_list_[j][per_class_*i:per_class_*(i+1)]
                 shuffle_list.extend(list_)
         for i in range((n_class*n_samples_per_class)//batch_size):
             assert(len(set(labels[shuffle_list[i*batch_size:i*batch_size+batch_size]]))==class_per_batch)
-        return images[shuffle_list],labels[shuffle_list]
+        images = images[shuffle_list]
+        labels = labels[shuffle_list]
+        print 'images.shape',images.shape
+        return images,labels
         
     @property
     def num_examples(self):

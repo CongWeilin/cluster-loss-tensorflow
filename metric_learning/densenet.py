@@ -354,6 +354,7 @@ class DenseNet:
     def feature_extracting(self, data, batch_size):
         num_examples = data.num_examples
         total_feature_embeddings = []
+        gt_labels = []
         for i in range(num_examples // batch_size):
             batch = data.next_batch(batch_size)
             feed_dict = {
@@ -364,5 +365,7 @@ class DenseNet:
             fetches = [self.embeddings]
             feature_embeddings = self.sess.run(fetches, feed_dict=feed_dict)
             total_feature_embeddings.append(feature_embeddings)
-        total_feature_embeddings = np.array(total_feature_embeddings)
-        return total_feature_embeddings
+            gt_labels.append(batch[1])
+        gt_labels = np.array(gt_labels).reshape(-1,1)
+        total_feature_embeddings = np.array(total_feature_embeddings).reshape(-1,self.embedding_dim)
+        return total_feature_embeddings,gt_labels

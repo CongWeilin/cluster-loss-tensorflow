@@ -47,11 +47,10 @@ if training:
     model.train_all_epochs(train_params_cifar)
     
 if feature_extract:
-    if not training:
-        model.load_model()
+    model.load_model()
     print("Data provider test images: ", data_provider.test.num_examples)
-    feature_embeddings = model.feature_extracting(data_provider.test, batch_size=100)
+    feature_embeddings,gt_labels = model.feature_extracting(data_provider.test, batch_size=100)
     print(feature_embeddings.shape)
     np.save('feature_embedding.npy',feature_embeddings)
-
-
+    print(gt_labels.shape)
+    np.save('gt_labels.npy',gt_labels)

@@ -362,7 +362,7 @@ class DenseNet:
                 self.is_training: False,
             }
             fetches = [self.embeddings]
-            loss = self.sess.run(fetches, feed_dict=feed_dict)
+            feature_embeddings = self.sess.run(fetches, feed_dict=feed_dict)
             total_feature_embeddings.append(feature_embeddings)
         total_feature_embeddings = np.array(total_feature_embeddings)
         return total_feature_embeddings

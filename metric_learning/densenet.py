@@ -79,13 +79,16 @@ class DenseNet:
         tf.train.Saver().save(self.sess, self.save_path, global_step=global_step)
         
     def load_model(self):
+        var = tf.global_variables()
+        for var_ in var:
+            print var_.name
         try:
-            tf.train.Saver().restore(self.sess, self.pretrained_model)
+            tf.train.Saver().restore(self.sess, self.save_path)
         except Exception as e:
             raise IOError("Failed to to load model "
-                          "from save path: %s" % self.pretrained_model)
-        tf.train.Saver().restore(self.sess, self.pretrained_model)
-        print("Successfully load model from save path: %s" % self.pretrained_model)
+                          "from save path: %s" % self.save_path)
+        tf.train.Saver().restore(self.sess, self.save_path)
+        print("Successfully load model from save path: %s" % self.save_path)
 
     def load_pretrained_model(self):
         var = tf.global_variables()
@@ -289,7 +292,6 @@ class DenseNet:
             start_time = time.time()
             if epoch == reduce_lr_epoch_1 or epoch == reduce_lr_epoch_2:
                 learning_rate = learning_rate / 10
-                self.margin_multiplier = 0.94*self.margin_multiplier
                 print("Decrease learning rate, new lr = %f" % learning_rate)
 
 
@@ -317,6 +319,8 @@ class DenseNet:
     def train_one_epoch(self, data, batch_size, learning_rate):
         num_examples = data.num_examples
         total_loss = []
+        gt_labels = []
+        total_feature_embeddings = []
         for i in range(num_examples // batch_size):
             batch = data.next_batch(batch_size)
             images, labels = batch
@@ -326,14 +330,26 @@ class DenseNet:
                 self.learning_rate: learning_rate,
                 self.is_training: True,
             }
-            fetches = [self.train_step, self.loss]
+            fetches = [self.embeddings, self.loss, self.train_step]
             result = self.sess.run(fetches, feed_dict=feed_dict)
-            _, loss = result
+            feature_embeddings, loss,_ = result
             total_loss.append(loss)
+            gt_labels.append(labels)
+            total_feature_embeddings.append(feature_embeddings)
             self.batches_step += 1
             self.log_loss(loss, self.batches_step, prefix='per_batch',should_print=False)
+        gt_labels = np.array(gt_labels).reshape(-1,1)
+        total_feature_embeddings = np.array(total_feature_embeddings).reshape(-1,self.embedding_dim)
+        print "NMI_score is {}".format(show_NMI(feature_embeddings,labels))
         mean_loss = np.mean(total_loss)
         return mean_loss
+
+    def show_NMI(self,feature_embeddings,labels):
+        kmeans = KMeans(n_clusters=self.n_classes).fit(feature_embeddings)
+        print feature_embeddings.shape
+        print labels.shape
+        NMI_score = normalized_mutual_info_score(label,kmeans.labels_)
+        return NMI_score
 
     def test(self, data, batch_size):
         num_examples = data.num_examples

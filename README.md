@@ -22,7 +22,7 @@ This repository is an implementation of Deep Metric Learning via Facility Locati
 
 ## Clustering and Retrieval Evaluation
 1. Run `python visualization/tsne.py` can plot and save the cluster result on Cifar database.
-![tSNE](Evaluation/tsne.jpg)
+![tSNE](evaluation/tsne.jpg)
 
 
 ## Repository Information
